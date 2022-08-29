@@ -1,0 +1,2 @@
+p	linkRatio	samplenum
+0	0.02028824518446857	16528290
