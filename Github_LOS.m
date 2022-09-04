@@ -1,10 +1,10 @@
-%% ÊµÏÖHHPËã·¨
+%% å®žçŽ°HHPç®—æ³•
 clear;clc;
-%% ¶ÁÈëÓÃ»§CH2-L2ÏàËÆ¶È¾ØÕó
+%% è¯»å…¥ç”¨æˆ·CH2-L2ç›¸ä¼¼åº¦çŸ©é˜µ
 userSim = load('Data\\friendfeed\\social_data.txt');
 % userSim(:,3) = userSim(:,3)./sum(userSim(:,3));
 userSimM = full(spconvert(userSim));
-%²¹È«¾ØÕó
+%è¡¥å…¨çŸ©é˜µ
 [m,n]=size(userSimM);
 if m > n
     userSimM(:,n+1:m) = 0;
@@ -13,7 +13,7 @@ elseif m < n
 end
 userSimM = userSimM + userSimM';
 userSimM(userSimM~=0)=1;
-%% ¶ÁÈëÊý¾Ý£¬×ª»»³É¾ØÕó, »®·ÖÑµÁ·¼¯£¬²âÊÔ¼¯
+%% è¯»å…¥æ•°æ®ï¼Œè½¬æ¢æˆçŸ©é˜µ, åˆ’åˆ†è®­ç»ƒé›†ï¼Œæµ‹è¯•é›†
 data = load('Data\\friendfeed\\ratings_data.txt');
 data(:,3)=1;
 Net = spconvert(data);
@@ -36,25 +36,25 @@ plist = [];
 for r = 1:simulation
      [train test] = DivideNet(Net, ratioTrain, direction);
 
-    %½«¶ÁÈëµÄÓÃ»§  ÎïÆ· ´ò·Ö ×ª»»ÎªÓÃ»§*ÎïÆ·µÄ(0,1)¶þÎ¬¾ØÕó
-    train_data=full(train);  %ÑµÁ·¼¯ÓÃ»§µÄ×ÊÔ´·ÖÅä¾ØÕó
+    %å°†è¯»å…¥çš„ç”¨æˆ·  ç‰©å“ æ‰“åˆ† è½¬æ¢ä¸ºç”¨æˆ·*ç‰©å“çš„(0,1)äºŒç»´çŸ©é˜µ
+    train_data=full(train);  %è®­ç»ƒé›†ç”¨æˆ·çš„èµ„æºåˆ†é…çŸ©é˜µ
     test_data=full(test);
     clear train test;
-    train_user_du=sum(train_data,2); %»ñÈ¡ÓÃ»§¶È
+    train_user_du=sum(train_data,2); %èŽ·å–ç”¨æˆ·åº¦
     test_user_du=sum(test_data,2);
-    train_item_du = sum(train_data,1);%ÉÌÆ·µÄ¶È
+    train_item_du = sum(train_data,1);%å•†å“çš„åº¦
     [m,n]=size(train_data);
-    %»ñÈ¡²âÊÔ¼¯»òÕßÑµÁ·¼¯Ã»ÓÐ´ò·ÖµÄÓÃ»§
+    %èŽ·å–æµ‹è¯•é›†æˆ–è€…è®­ç»ƒé›†æ²¡æœ‰æ‰“åˆ†çš„ç”¨æˆ·
     index1 = find(train_user_du==0);
     index2 = find(test_user_du==0);
     index_ = unique(union(index1,index2)); 
     clear index1 index2;
     index4 = find(test_user_du~=0);
-%     UserExistsBoth = intersect(index3,index4);%%%ÓÃÓÚÆÀ¼ÛÖ¸±êµÄ¼ÆËã
+%     UserExistsBoth = intersect(index3,index4);%%%ç”¨äºŽè¯„ä»·æŒ‡æ ‡çš„è®¡ç®—
     UserExistsBoth = index4;
     clear index4;
 
-    %»ñÈ¡µÚÒ»²½´«²¥Ç°TopN¸öÁÚ¾ÓÓÃ»§
+    %èŽ·å–ç¬¬ä¸€æ­¥ä¼ æ’­å‰TopNä¸ªé‚»å±…ç”¨æˆ·
     I = eye(m);
     AA = train_data * train_data';
     user_sim = sum(AA,2);
@@ -68,23 +68,23 @@ for r = 1:simulation
             pre1 = term*inv(term+I)*train_data;
             pre1 = pre1.*(~train_data);
 %             pre1 = train_data*train_data'*pre1;
-            %***********************************¶Ô²âÊÔ¼¯Êý¾Ý´¦Àí³ÉºÍÑµÁ·¼¯ÎªÏàÍ¬¹æÄ£µÄ¾ØÕó******************************************
-            %Èç¹ûtest_dataµÄsize´óÓÚtd¾ØÕó£¬ËµÃ÷testÖÐÓÐtdÖÐÃ»ÓÐÉæ¼°µ½µÄÓÃ»§£¨ÉÌÆ·£©£¬ÄÇÃ´ÕâÐ©ÉÌÆ·Ó¦¸ÃÈ¥µô
+            %***********************************å¯¹æµ‹è¯•é›†æ•°æ®å¤„ç†æˆå’Œè®­ç»ƒé›†ä¸ºç›¸åŒè§„æ¨¡çš„çŸ©é˜µ******************************************
+            %å¦‚æžœtest_dataçš„sizeå¤§äºŽtdçŸ©é˜µï¼Œè¯´æ˜Žtestä¸­æœ‰tdä¸­æ²¡æœ‰æ¶‰åŠåˆ°çš„ç”¨æˆ·ï¼ˆå•†å“ï¼‰ï¼Œé‚£ä¹ˆè¿™äº›å•†å“åº”è¯¥åŽ»æŽ‰
             [m1,n1]=size(pre1);
             [m2,n2]=size(test_data);
-            if(max(m1,m2)==m1)  %Èç¹ûÍÆ¼ö¼¯ºÏÖÐÓÃ»§¶àÓÚ²âÊÔ¼¯ÖÐµÄÓÃ»§£¬ÔÚ²âÊÔ¼¯ÖÐ²¹ÉÏÈ±Ê§µÄÓÃ»§ÐÐ£¨ÖµÎª0£©
+            if(max(m1,m2)==m1)  %å¦‚æžœæŽ¨èé›†åˆä¸­ç”¨æˆ·å¤šäºŽæµ‹è¯•é›†ä¸­çš„ç”¨æˆ·ï¼Œåœ¨æµ‹è¯•é›†ä¸­è¡¥ä¸Šç¼ºå¤±çš„ç”¨æˆ·è¡Œï¼ˆå€¼ä¸º0ï¼‰
             test_data(m2+1:m1,:) = 0;
             else
             test_data(m1+1:m2,:) = [];
             end
-            if(max(n1,n2)==n1)  %Èç¹ûÍÆ¼ö¼¯ºÏÖÐÓÃ»§ÍÆ¼öµÄÎïÆ·¶àÓÚ²âÊÔ¼¯ÖÐµÄÎïÆ·£¬ÔòÔÚ²âÊÔ¼¯ÖÐ²¹ÉÏÈ±Ê§µÄÎïÆ·£¨ÖµÎª0£©
+            if(max(n1,n2)==n1)  %å¦‚æžœæŽ¨èé›†åˆä¸­ç”¨æˆ·æŽ¨èçš„ç‰©å“å¤šäºŽæµ‹è¯•é›†ä¸­çš„ç‰©å“ï¼Œåˆ™åœ¨æµ‹è¯•é›†ä¸­è¡¥ä¸Šç¼ºå¤±çš„ç‰©å“ï¼ˆå€¼ä¸º0ï¼‰
             test_data(:,n2+1:n1) = 0;
             else
             test_data(:,n1+1:n2) = [];
             end
             clear  m1 m2 n1 n2;
-            %******************************½øÐÐÖ¸±êÆÀ¼Û****************************************************************************
-           %¶ÔÍÆ¼ö½á¹û½øÐÐÅÅÐò(ÅÅÐòÌõ¼þ ²âÊÔ¼¯¾ØÕóºÍÍÆ¼ö¾ØÕó¹æÄ£ÏàÍ¬£¬ÇÒ³ýÈ¥Ä¿±êÓÃ»§ä¯ÀÀ¹ýµÄÎïÆ·)
+            %******************************è¿›è¡ŒæŒ‡æ ‡è¯„ä»·****************************************************************************
+           %å¯¹æŽ¨èç»“æžœè¿›è¡ŒæŽ’åº(æŽ’åºæ¡ä»¶ æµ‹è¯•é›†çŸ©é˜µå’ŒæŽ¨èçŸ©é˜µè§„æ¨¡ç›¸åŒï¼Œä¸”é™¤åŽ»ç›®æ ‡ç”¨æˆ·æµè§ˆè¿‡çš„ç‰©å“)
            r1 = 0;
            recall=0;
            pre=0;
@@ -93,9 +93,9 @@ for r = 1:simulation
            number1=0;
            aupr = 0;
          
-           %±éÀúÑµÁ·¼¯ÖÐµÄÓÃ»§
+           %éåŽ†è®­ç»ƒé›†ä¸­çš„ç”¨æˆ·
            for i = 1:m
-            if(any(index_==i)==0) %any¼ì²é¾ØÕóÖÐÊÇ·ñÓÐ·ÇÁãÔªËØ
+            if(any(index_==i)==0) %anyæ£€æŸ¥çŸ©é˜µä¸­æ˜¯å¦æœ‰éžé›¶å…ƒç´ 
                % if train_user_du(i)<=threshold
                     temp = (train_data(i,:)==0);
                     number = number+nnz(test_data(i,temp));
@@ -127,4 +127,4 @@ end
 %result ouput
 mean(indexResult(1:simulation,:),1)
 
-disp('ÔËÐÐÍê±Ï')
+disp('è¿è¡Œå®Œæ¯•')
